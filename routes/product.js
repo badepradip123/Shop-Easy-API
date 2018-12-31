@@ -1,7 +1,6 @@
 const express =  require('express');
 const router =  express.Router(); 
 const passport = require('passport');
-const config =  require('../config/database');
 const Product  = require('../models/product');
 const multer = require('multer')
 const storage = multer.diskStorage({
@@ -28,14 +27,41 @@ router.get('/', (req, res, next) => {
     });       
   });
 
-//get all products by Id
-router.get('/:id',passport.authenticate('jwt', { session: false}), (req, res, next)=> {    
-    Product.getProductsById(req.params.id, (err,product) => {
+//get all products by seller Id
+router.get('/seller/:id',passport.authenticate('jwt', { session: false}), (req, res, next)=> {    
+    Product.getProductsBySellerId(req.params.id, (err,product) => {
         if(err){
             res.json({success: false, msg: 'Failed to get products' });
         }
         else {            
             res.json(product);
+        }
+    });               
+}); 
+
+//get all products by product Id
+router.get('/:id',passport.authenticate('jwt', { session: false}), (req, res, next)=> {    
+    Product.getProductById(req.params.id, (err,product) => {
+        if(err){
+            res.json({success: false, msg: 'Failed to get products' });
+        }
+        else {            
+            res.json(product);
+        }
+    });               
+}); 
+
+router.post('/transaction',passport.authenticate('jwt', { session: false}), (req, res, next)=> {  
+    const trans = {
+        user_id : req.body.user,
+        product_id: req.body.product
+    }  
+    Product.addTransaction(trans, (err,result) => {
+        if(err){
+            res.json({status: false, msg: 'Failed to add transaction' });
+        }
+        else {            
+            res.json({status: true, msg: 'Successfuly added transaction' });
         }
     });               
 }); 

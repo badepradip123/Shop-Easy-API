@@ -56,6 +56,7 @@ router.post('/authenticate', (req, res, next) => {
                             name: user.name,
                             username: user.username,
                             email: user.email,
+                            address: user.address,
                             type: user.type
                             
                         }

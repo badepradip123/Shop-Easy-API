@@ -27,7 +27,7 @@ module.exports.addUser = function(newUser, callback)  {
     bcrypt.genSalt(10, (err,salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
             newUser.password = hash;
-            console.log(newUser.password);
+            //console.log(newUser.password);
             if(err){
                 throw err;
             }
